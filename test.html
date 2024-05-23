@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web NFC Reader</title>
+</head>
+<body>
+    <button id="readNFC">读取 NFC 标签</button>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const readNFCButton = document.getElementById('readNFC');
+    readNFCButton.addEventListener('click', readNFC);
+});
+
+async function readNFC() {
+    try {
+        const ndef = new NDEFReader();
+        await ndef.scan();
+        ndef.addEventListener('reading', ({ serialNumber, message }) => {
+            alert(`Serial Number: ${serialNumber}`);
+            message.records.forEach((record) => {
+                alert(`Record Type: ${record.recordType}`);
+                alert(`MIME Type: ${record.mediaType}`);
+                alert(`Data: ${record.data}`);
+            });
+        });
+    } catch (error) {
+        alert(`Argh! ${error}`);
+    }
+}
+    </script>
+</body>
+</html>
